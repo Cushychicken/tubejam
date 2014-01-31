@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Want to know when we go live?</h1>
+    <h2>Leave us your name and email and we'll get in touch with you about beta testing!</h2>
+    <form action="{{ url_for('register') }}" method=post>
+        {{ form.hidden_tag() }}
+
+		{{ form.name.label }}
+		{{ form.name }}
+
+		{{ form.email.label }}
+		{{ form.email }}
+
+		{{ form.submit }}
+	</form>
+{% endblock %}

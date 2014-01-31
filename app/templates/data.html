@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+ 
+{% block content %}
+	<h2>Posted</h2>
+	<h3>{{ data['url'] }}</h3>
+	<h3>{{ data['vid'] }}</h3>
+	<iframe width="560" height="315" src="//www.youtube.com/embed/{{ data['vid'] }}" frameborder="0" allowfullscreen></iframe>
+{% endblock %} 
