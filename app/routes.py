@@ -1,6 +1,24 @@
 from flask import Flask, render_template, request
 from forms import YoutubeForm, RegisterForm
 from models import db, Signup
+import youtube_dl as yt
+import re
+
+### YoutubeDL regex and setup ###
+
+# Regex to find output file by its name
+yt_re = re.compile(r'www\.youtube\.com/watch\?v=(\S+)')
+
+# YoutubeDL options
+#   -output format string
+#   -extract only audio (i think)
+ytdl_opts = { 'outtmpl': '%(id)s.%(ext)s',
+              'opts': ['extract-audio']
+            }
+ytdl = yt.YoutubeDL(ytdl_opts)
+
+# Set default info to extract
+ytdl.add_default_info_extractors()
 
 
 class Settings:
@@ -12,6 +30,20 @@ class Settings:
 
 app = Flask(__name__)
 app.config.from_object(Settings)
+
+@app.route('/', methods=['GET','POST'])
+def main():
+    form = YoutubeForm()
+    if request.method == 'POST' and form.validate():
+        youtube_url = form.url.data
+        result = yt_re.search(youtube_url)
+        if result:
+            video = ytdl.extract_info(youtube_url, download=True)
+            return result.group(1) + ' ' + youtube_url
+        else:
+            return youtube_url
+    elif request.method == 'GET':
+        return render_template('main.html', form=form)
 
 # Registration Page (let people be posted)
 @app.route('/register', methods=['GET', 'POST'])
@@ -29,13 +61,6 @@ def register():
             return render_template('thanks.html')
     elif request.method == 'GET':
         return render_template('register.html', form=form)
-
-@app.route('/testdb')
-def testdb():
-    if db.session.query("1").from_statement("SELECT 1").all():
-        return 'It works!'
-    else:
-        return 'Somethings broke.'
 
 if __name__ == '__main__':
     db.init_app(app)
