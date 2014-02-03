@@ -2,16 +2,30 @@
 
 {% block content %}
     <h1>Want to know when we go live?</h1>
-    <h2>Leave us your name and email and we'll get in touch with you about beta testing!</h2>
-    <form action="{{ url_for('register') }}" method=post>
+	<p class="lead">Leave us your name and email.<br>We'll get in touch about beta testing!</p>
+	<form action="{{ url_for('register') }}" method=post>
+		<table align="center">
         {{ form.hidden_tag() }}
 
+		<tr align="center">
+		<td align="center">
 		{{ form.name.label }}
 		{{ form.name }}
+		</td>
+		</tr>
 
+		<tr align="center">
+		<td align="center">
 		{{ form.email.label }}
 		{{ form.email }}
+		</td>
+	    </tr>
 
+		<tr align="center">
+		<td align="center">
 		{{ form.submit }}
+		</td>
+	    </tr>
+		</table>
 	</form>
 {% endblock %}

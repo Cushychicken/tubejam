@@ -13,7 +13,7 @@ yt_re = re.compile(r'www\.youtube\.com/watch\?v=(\S+)')
 #   -output format string
 #   -extract only audio (i think)
 ytdl_opts = { 'outtmpl': '%(id)s.%(ext)s',
-              'opts': ['extract-audio']
+              'extract-audio': True
             }
 ytdl = yt.YoutubeDL(ytdl_opts)
 

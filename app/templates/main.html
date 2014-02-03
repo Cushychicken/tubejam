@@ -2,13 +2,24 @@
 
 {% block content %}
     <h1>Practice from Youtube!</h1>
-    <h2>Slow down Youtube videos with ease.</h2>
-    <form action="{{ url_for('main') }}" method=post>
-        {{ form.hidden_tag() }}
+	<p class="lead">Slow down Youtube videos with ease.</p>
+	<p class="lead">
+	<form action="{{ url_for('main') }}" method=post>
+		<table align="center">
+			{{ form.hidden_tag() }}
+			<tr align="center">
+				<td align="center">
+					{{ form.url.label }}
+					{{ form.url }}
+				</td>
+			</tr>
 
-		{{ form.url.label }}
-		{{ form.url }}
-
-		{{ form.submit }}
+			<tr align="center">
+				<td align="center">
+					{{ form.submit }}
+				</td>
+			</tr>
+		</table>
 	</form>
+	</p>
 {% endblock %}
