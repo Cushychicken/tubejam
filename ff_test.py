@@ -2,7 +2,7 @@ import subprocess as sp
 import re
 from sys import argv
 
-def mp3_slowdown(f_in, rate='0.5'):
+def mp3_slowdown(f_in, rate='0.6'):
     # FFMPEG binary
     FFMPEG_BIN = 'ffmpeg'
     # Destination Filehandle
@@ -10,16 +10,16 @@ def mp3_slowdown(f_in, rate='0.5'):
     mp3_trans = open(chop_ext[0] + '-slow.mp3', 'wb')
 
     # Command array
-    cmd = [ FFMPEG_BIN, '-i', '"%s"' % f_in,
-           '-filter:a', '"atempo=%s"' % rate,
-           '-f', 'mp3', '-']
-    print " ".join(cmd)
+    cmd = [ FFMPEG_BIN, 
+            '-i', ('%s' % f_in),
+            '-filter:a', ('atempo=%s' % rate),
+            '-vn',
+            '-f', 'mp3', '-']
 
     # Subprocess pipe variable
     pipe = sp.Popen(cmd,
                     stdin=sp.PIPE, 
-                    stdout=sp.PIPE, 
-                    stderr=sp.PIPE)
+                    stdout=sp.PIPE)
 
     # Write ffmpeg data to file and close
     mp3_trans.write(pipe.stdout.read())
@@ -44,8 +44,7 @@ def audio_extract(f_in):
     # Command Array
     pipe = sp.Popen(cmd,
                     stdin=sp.PIPE, 
-                    stdout=sp.PIPE, 
-                    stderr=sp.PIPE)
+                    stdout=sp.PIPE)
     mp3_trans.write(pipe.stdout.read())
     mp3_trans.close()
     return chop_ext[0] + '.mp3'
@@ -53,14 +52,17 @@ def audio_extract(f_in):
 if __name__ == '__main__':
     codec_re = re.compile(r'(.*)\.mp([34])')
     for arg in argv[1:]:
+        print "File input: ", arg
         result = codec_re.search(arg)
         codec = ''
         if result:
             codec = result.group(2)
             if codec == '3':
                 result = mp3_slowdown(arg)
+                print result, 'written'
             elif codec == '4':
                 result = audio_extract(arg)
+                print result, 'written'
         else:
             print "Please provide an .mp3 or .mp4 file to transcode."
             raise SystemExit
