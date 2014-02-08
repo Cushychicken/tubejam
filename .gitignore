@@ -5,6 +5,9 @@
 __pycache__/
 *.py[cod]
 
+# video/audio files
+*.mp[34]
+
 # C extensions
 *.so
 
